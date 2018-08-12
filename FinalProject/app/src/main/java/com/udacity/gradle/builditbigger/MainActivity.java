@@ -6,13 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.android.androidjokes.JokeActivity;
-import com.example.android.javajokes.Joke;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EndpointsAsyncTask.AsyncResponse {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +42,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        String joke = Joke.tellJoke();
 
+        EndpointsAsyncTask task = new EndpointsAsyncTask();
+        task.response = (EndpointsAsyncTask.AsyncResponse) this;
+
+        task.execute(this);
+
+    }
+
+    @Override
+    public void showJoke(String joke) {
         Intent intent = new Intent(this, JokeActivity.class);
         intent.putExtra("key-joke", joke);
-        
+
         startActivity(intent);
     }
 
